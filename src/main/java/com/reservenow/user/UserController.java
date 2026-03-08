@@ -21,7 +21,7 @@ public class UserController {
     public User createUser(
             @RequestBody User user
     ) {
-        // This calls the service layer
+        // Calls the service layer
         return userService.createUser(user);
     }
     // GET ALL USERS (HTTP GET)
