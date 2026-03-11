@@ -1,5 +1,7 @@
 package com.reservenow.user;
 
+import com.reservenow.user.dto.UserRequest;
+import com.reservenow.user.dto.UserResponse;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,19 +18,16 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    // CREATE USER (HTTP POST)
-    @PostMapping
-    public User createUser(
-            @RequestBody User user
-    ) {
-        // Calls the service layer
-        return userService.createUser(user);
-    }
-    // GET ALL USERS (HTTP GET)
-    @GetMapping
-    public List<User> getAllUsers() {
 
-        // Spring automatically converts list into JSON
+    // Creates a user from request JSON and returns a safe response (HTTP POST)
+    @PostMapping
+    public UserResponse createUser(@RequestBody UserRequest request) {
+        return userService.createUser(request);
+    }
+
+    // Returns all users without exposing passwords (HTTP GET)
+    @GetMapping
+    public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
     }
 }
