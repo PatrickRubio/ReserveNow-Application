@@ -2,6 +2,7 @@ package com.reservenow.user;
 
 import com.reservenow.user.dto.UserRequest;
 import com.reservenow.user.dto.UserResponse;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -14,14 +15,14 @@ public class UserController {
     // Spring injects dependency injection automatically
     private final UserService userService;
 
-    // Spring sees this as a constructor
+    // Spring injects UserService automatically
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     // Creates a user from request JSON and returns a safe response (HTTP POST)
     @PostMapping
-    public UserResponse createUser(@RequestBody UserRequest request) {
+    public UserResponse createUser(@Valid @RequestBody UserRequest request) {
         return userService.createUser(request);
     }
 
