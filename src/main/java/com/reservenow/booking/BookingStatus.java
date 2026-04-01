@@ -1,4 +1,8 @@
 package com.reservenow.booking;
 
-public class BookingStatus {
+// Represents the lifecycle state of a booking
+public enum BookingStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELLED
 }
