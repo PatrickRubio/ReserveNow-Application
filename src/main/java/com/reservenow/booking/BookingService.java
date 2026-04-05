@@ -29,6 +29,11 @@ public class BookingService {
     // Creates booking from incoming request data
     public BookingResponse createBooking(BookingRequest request) {
 
+        // End date must be after start date
+        if (!request.getEndDate().isAfter(request.getStartDate())) {
+            throw new RuntimeException("End date must be after start date");
+        }
+
         // Find the user by ID
         // If not found, throw an exception
         User user = userRepository.findById(request.getUserId())
