@@ -44,6 +44,22 @@ public class BookingService {
         Listing listing = listingRepository.findById(request.getListingId())
                 .orElseThrow(() -> new RuntimeException("Listing not found"));
 
+        // Listing must be available before it can be booked
+        if (!listing.getAvailable()) {
+            throw new RuntimeException("Listing is not available for booking");
+        }
+
+        // Prevent overlapping bookings for the same listing
+        boolean hasConflict = bookingRepository
+                .existsByListingIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        listing.getId(),
+                        request.getEndDate(),
+                        request.getStartDate()
+                );
+        if (hasConflict) {
+            throw new RuntimeException("Listing is already booked for the selected dates");
+        }
+
         // Build the new booking object
         Booking booking = new Booking();
         booking.setUser(user);
