@@ -49,6 +49,9 @@ public class BookingService {
             throw new RuntimeException("Listing is not available for booking");
         }
 
+        // Listing must not be older than 1 year
+
+
         // Prevent overlapping bookings for the same listing
         boolean hasConflict = bookingRepository
                 .existsByListingIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
