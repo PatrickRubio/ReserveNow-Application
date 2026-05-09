@@ -13,7 +13,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // POST /api/auth/login
+    // POST/Create  Login
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);
