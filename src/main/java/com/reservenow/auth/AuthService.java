@@ -1,5 +1,6 @@
 package com.reservenow.auth;
 
+import com.reservenow.exception.InvalidCredentialsException;
 import com.reservenow.user.User;
 import com.reservenow.user.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,10 +17,10 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    // See if email exists and the password matches the stored hash
+    // See if email exists and the password matches
     public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
         boolean passwordMatches = passwordEncoder.matches(
                 request.getPassword(),
@@ -27,7 +28,7 @@ public class AuthService {
         );
 
         if (!passwordMatches) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         return new LoginResponse(

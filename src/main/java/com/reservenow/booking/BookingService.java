@@ -2,6 +2,8 @@ package com.reservenow.booking;
 
 import com.reservenow.booking.dto.BookingRequest;
 import com.reservenow.booking.dto.BookingResponse;
+import com.reservenow.exception.BusinessRuleException;
+import com.reservenow.exception.ResourceNotFoundException;
 import com.reservenow.listing.Listing;
 import com.reservenow.listing.ListingRepository;
 import com.reservenow.user.User;
@@ -31,22 +33,22 @@ public class BookingService {
 
         // End date must be after start date
         if (!request.getEndDate().isAfter(request.getStartDate())) {
-            throw new RuntimeException("End date must be after start date");
+            throw new ResourceNotFoundException("End date must be after start date");
         }
 
         // Find the user by ID
         // If not found, throw an exception
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Find the listing by ID
         // If not found, throw an exception
         Listing listing = listingRepository.findById(request.getListingId())
-                .orElseThrow(() -> new RuntimeException("Listing not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Listing not found"));
 
         // Listing must be available before it can be booked
         if (!listing.getAvailable()) {
-            throw new RuntimeException("Listing is not available for booking");
+            throw new BusinessRuleException("Listing is not available for booking");
         }
 
         // Prevent overlapping bookings for the same listing
@@ -57,7 +59,7 @@ public class BookingService {
                         request.getStartDate()
                 );
         if (hasConflict) {
-            throw new RuntimeException("Listing is already booked for the selected dates");
+            throw new BusinessRuleException("Listing is already booked for the selected dates");
         }
 
         // Build the new booking object
