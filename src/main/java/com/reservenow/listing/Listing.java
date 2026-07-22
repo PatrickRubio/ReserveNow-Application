@@ -42,7 +42,7 @@ public class Listing {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ===== Getters and Setters =====
+    // Getters and Setters
 
     public Long getId() {
         return id;
