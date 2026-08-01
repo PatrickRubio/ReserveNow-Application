@@ -26,7 +26,7 @@ public class UserController {
         return userService.createUser(request);
     }
 
-    // Returns all users without exposing passwords (HTTP GET)
+    // Returns all users without exposing passwords
     @GetMapping
     public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
